@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EVAUPA — Criando soluções digitais para um universo de possibilidades</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --space-dark: #0a0a1a;
+            --space-deep: #0f0f2e;
+            --space-blue: #1a1a4e;
+            --neon-blue: #00d4ff;
+            --neon-cyan: #00f0ff;
+            --neon-purple: #a855f7;
+            --eva-red: #e63946;
+            --eva-red-glow: #ff2a6d;
+            --white: #ffffff;
+            --text-muted: #a0a0c0;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--space-dark);
+            color: var(--white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ===== CANVAS DE PARTÍCULAS ===== */
+        #particles-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ===== MOUSE GLOW ===== */
+        .mouse-glow {
+            position: fixed;
+            width: 400px; height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, rgba(168, 85, 247, 0.08) 40%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+            transform: translate(-50%, -50%);
+            transition: left 0.1s ease-out, top 0.1s ease-out;
+            mix-blend-mode: screen;
+        }
+
+        /* ===== NAVEGAÇÃO ===== */
+        nav {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 26, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+        nav.scrolled {
+            padding: 0.7rem 2rem;
+            background: rgba(10, 10, 26, 0.95);
+        }
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--white);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .logo img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(230, 57, 70, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(230, 57, 70, 0.8); }
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .nav-links a:hover { color: var(--neon-blue); }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px; left: 0;
+            width: 0; height: 2px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            transition: width 0.3s ease;
+        }
+        .nav-links a:hover::after { width: 100%; }
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+            padding: 8rem 2rem 4rem;
+            overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: url('images/wallpaper.jpg') center/cover no-repeat;
+            opacity: 0.4;
+            z-index: -2;
+        }
+        .hero-bg-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(180deg, rgba(10,10,26,0.3) 0%, rgba(10,10,26,0.7) 50%, var(--space-dark) 100%);
+            z-index: -1;
+        }
+        .hero-bg-elements {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(1px);
+        }
+        .planet-1 {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle at 30% 30%, rgba(0, 212, 255, 0.3), rgba(168, 85, 247, 0.1), transparent);
+            top: 10%; right: -100px;
+            animation: float 8s ease-in-out infinite;
+        }
+        .planet-2 {
+            width: 200px; height: 200px;
+            background: radial-gradient(circle at 40% 40%, rgba(230, 57, 70, 0.2), rgba(255, 42, 109, 0.1), transparent);
+            bottom: 20%; left: -50px;
+            animation: float 10s ease-in-out infinite reverse;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(5deg); }
+        }
+        .hero-content {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        .hero-text h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--white) 0%, var(--neon-blue) 50%, var(--neon-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-text .tagline {
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+        .hero-text .description {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 500px;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--eva-red), var(--eva-red-glow));
+            color: var(--white);
+            box-shadow: 0 0 30px rgba(230, 57, 70, 0.4);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 50px rgba(230, 57, 70, 0.6), 0 10px 40px rgba(230, 57, 70, 0.3);
+        }
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+        .btn-secondary:hover {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+            transform: translateY(-3px);
+        }
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .mascot-container {
+            width: 400px;
+            height: 500px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .mascot-glow {
+            position: absolute;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(230, 57, 70, 0.25) 0%, rgba(0, 212, 255, 0.1) 50%, transparent 70%);
+            border-radius: 50%;
+            animation: glow-pulse 3s ease-in-out infinite;
+        }
+        @keyframes glow-pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        .mascot-img {
+            width: 320px;
+            height: auto;
+            max-height: 450px;
+            object-fit: contain;
+            position: relative;
+            z-index: 2;
+            filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.3));
+            animation: mascot-float 4s ease-in-out infinite;
+        }
+        @keyframes mascot-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .orbit-ring {
+            position: absolute;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 50%;
+            animation: orbit 20s linear infinite;
+        }
+        .orbit-ring-1 { width: 380px; height: 380px; }
+        .orbit-ring-2 { width: 450px; height: 450px; border-color: rgba(230, 57, 70, 0.15); animation-duration: 25s; animation-direction: reverse; }
+        @keyframes orbit {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .orbit-dot {
+            position: absolute;
+            width: 8px; height: 8px;
+            background: var(--neon-blue);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+        .orbit-ring-1 .orbit-dot { top: -4px; left: 50%; transform: translateX(-50%); }
+        .orbit-ring-2 .orbit-dot { bottom: -4px; left: 50%; transform: translateX(-50%); background: var(--eva-red); box-shadow: 0 0 10px var(--eva-red); }
+
+        /* ===== SEÇÕES ===== */
+        section { position: relative; z-index: 2; padding: 6rem 2rem; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        .section-header h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--white), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== SOBRE ===== */
+        .about { background: linear-gradient(180deg, transparent, rgba(15, 15, 46, 0.5), transparent); }
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        .about-text h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+        }
+        .about-text p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+        .about-visual { display: flex; justify-content: center; }
+        .about-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            max-width: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+        .about-card::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
+            animation: card-shine 5s ease-in-out infinite;
+        }
+        @keyframes card-shine {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+        }
+        .about-card-content { position: relative; z-index: 1; }
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .stat-item:last-child .stat-row { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--neon-blue);
+        }
+        .stat-label { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* ===== APLICATIVOS ===== */
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        .app-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(168, 85, 247, 0.05));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .app-card:hover::before { opacity: 1; }
+        .app-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            border-color: rgba(0, 212, 255, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.15), 0 0 40px rgba(0, 212, 255, 0.1);
+        }
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        .app-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+        .app-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        .app-card p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        .app-status {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        .status-dev {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--neon-blue);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+        .app-card .btn {
+            position: relative;
+            z-index: 1;
+            padding: 0.8rem 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* ===== ENTRETENIMENTO ===== */
+        .entertainment { background: linear-gradient(180deg, transparent, rgba(26, 26, 78, 0.3), transparent); }
+        .ent-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        .ent-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .ent-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple), var(--eva-red));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+        .ent-card:hover::after { transform: scaleX(1); }
+        .ent-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(168, 85, 247, 0.3);
+            box-shadow: 0 15px 50px rgba(168, 85, 247, 0.15);
+        }
+        .ent-icon {
+            width: 60px; height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(0, 212, 255, 0.1));
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+        .ent-card h4 { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .ent-card p { color: var(--text-muted); font-size: 0.95rem; }
+
+        /* ===== DIFERENCIAIS ===== */
+        .diff-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        .diff-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .diff-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 212, 255, 0.3);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.1);
+        }
+        .diff-icon {
+            width: 60px; height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(168, 85, 247, 0.1));
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+        .diff-card h4 { font-size: 1.3rem; font-weight: 600; margin-bottom: 1rem; }
+        .diff-card p { color: var(--text-muted); font-size: 1rem; }
+
+        /* ===== PORTFÓLIO ===== */
+        .portfolio { background: linear-gradient(180deg, transparent, rgba(15, 15, 46, 0.5), transparent); }
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .portfolio-item {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative;
+            height: 280px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .portfolio-item::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(168, 85, 247, 0.1));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .portfolio-item:hover::before { opacity: 1; }
+        .portfolio-item:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(0, 212, 255, 0.4);
+            box-shadow: 0 20px 50px rgba(0, 212, 255, 0.2), inset 0 0 30px rgba(0, 212, 255, 0.05);
+        }
+        .portfolio-icon { font-size: 3rem; margin-bottom: 1rem; z-index: 1; }
+        .portfolio-item h4 { font-size: 1.2rem; font-weight: 600; z-index: 1; }
+        .portfolio-item p { color: var(--text-muted); font-size: 0.9rem; z-index: 1; margin-top: 0.5rem; }
+
+        /* ===== CTA ===== */
+        .cta {
+            text-align: center;
+            padding: 8rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-bg {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, rgba(168, 85, 247, 0.05) 40%, transparent 70%);
+            pointer-events: none;
+        }
+        .cta h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--white), var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .cta p {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+        }
+        .cta .btn-primary { font-size: 1.1rem; padding: 1.2rem 3rem; }
+
+        /* ===== RODAPÉ ===== */
+        footer {
+            background: rgba(10, 10, 26, 0.95);
+            border-top: 1px solid var(--glass-border);
+            padding: 4rem 2rem 2rem;
+            position: relative;
+            z-index: 2;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        .footer-brand .logo { margin-bottom: 1rem; }
+        .footer-brand p { color: var(--text-muted); font-size: 0.95rem; max-width: 300px; }
+        .footer-links h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+        }
+        .footer-links ul { list-style: none; }
+        .footer-links li { margin-bottom: 0.8rem; }
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        .footer-links a:hover { color: var(--neon-blue); padding-left: 5px; }
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .social-links a {
+            width: 40px; height: 40px;
+            border-radius: 12px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        .social-links a:hover {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            border-color: transparent;
+            transform: translateY(-3px);
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* ===== WHATSAPP FLOAT ===== */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 2rem; right: 2rem;
+            width: 60px; height: 60px;
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.8rem;
+            text-decoration: none;
+            z-index: 999;
+            box-shadow: 0 5px 25px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s ease;
+            animation: whatsapp-pulse 2s ease-in-out infinite;
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 35px rgba(37, 211, 102, 0.6);
+        }
+        @keyframes whatsapp-pulse {
+            0%, 100% { box-shadow: 0 5px 25px rgba(37, 211, 102, 0.4); }
+            50% { box-shadow: 0 5px 40px rgba(37, 211, 102, 0.7); }
+        }
+
+        /* ===== ANIMAÇÕES ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+
+        /* ===== RESPONSIVO ===== */
+        @media (max-width: 968px) {
+            .hero-content { grid-template-columns: 1fr; text-align: center; }
+            .hero-text .description { margin-left: auto; margin-right: auto; }
+            .hero-buttons { justify-content: center; }
+            .hero-visual { order: -1; }
+            .mascot-container { width: 300px; height: 380px; }
+            .mascot-img { width: 250px; }
+            .orbit-ring-1 { width: 280px; height: 280px; }
+            .orbit-ring-2 { width: 340px; height: 340px; }
+            .about-content { grid-template-columns: 1fr; }
+            .footer-content { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 640px) {
+            .nav-links { display: none; }
+            .mobile-menu-btn { display: block; }
+            .hero { padding: 7rem 1rem 3rem; }
+            section { padding: 4rem 1rem; }
+            .apps-grid { grid-template-columns: 1fr; }
+            .diff-grid { grid-template-columns: 1fr; }
+            .portfolio-grid { grid-template-columns: 1fr; }
+            .footer-content { grid-template-columns: 1fr; gap: 2rem; }
+            .whatsapp-float { width: 50px; height: 50px; font-size: 1.4rem; bottom: 1rem; right: 1rem; }
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--space-dark); }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--neon-blue), var(--neon-purple)); border-radius: 4px; }
+
+        /* ===== ESTRELAS ===== */
+        .star {
+            position: absolute;
+            width: 2px; height: 2px;
+            background: var(--white);
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        /* ===== LOGO HERO ===== */
+        .hero-logo-img {
+            width: 120px;
+            height: auto;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.4));
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+    <div class="mouse-glow" id="mouseGlow"></div>
+
+    <!-- Navegação -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <img src="images/logo_evaupa.png" alt="EVAUPA Logo">
+                EVAUPA
+            </a>
+            <ul class="nav-links">
+                <li><a href="#inicio">Início</a></li>
+                <li><a href="#sobre">Sobre</a></li>
+                <li><a href="#aplicativos">Aplicativos</a></li>
+                <li><a href="#entretenimento">Entretenimento</a></li>
+                <li><a href="#contato">Contato</a></li>
+            </ul>
+            <button class="mobile-menu-btn">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero" id="inicio">
+        <div class="hero-bg"></div>
+        <div class="hero-bg-overlay"></div>
+        <div class="hero-bg-elements">
+            <div class="planet planet-1"></div>
+            <div class="planet planet-2"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <img src="images/logo_evaupa.png" alt="EVAUPA" class="hero-logo-img">
+                <h1>EVAUPA</h1>
+                <p class="tagline">Ideias digitais que transformam o dia a dia em experiências inteligentes.</p>
+                <p class="description">A EVAUPA desenvolve aplicativos, soluções digitais e projetos de entretenimento com inteligência artificial, unindo criatividade, tecnologia e praticidade.</p>
+                <div class="hero-buttons">
+                    <a href="#aplicativos" class="btn btn-primary">🚀 Conheça nossos projetos</a>
+                    <a href="#contato" class="btn btn-secondary">💬 Fale com a EVAUPA</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="mascot-container">
+                    <div class="orbit-ring orbit-ring-1"><div class="orbit-dot"></div></div>
+                    <div class="orbit-ring orbit-ring-2"><div class="orbit-dot"></div></div>
+                    <div class="mascot-glow"></div>
+                    <img src="images/mascote_full.png" alt="Mascote EVAUPA" class="mascot-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre -->
+    <section class="about" id="sobre">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>Quem somos</h2>
+            </div>
+            <div class="about-content">
+                <div class="about-text reveal">
+                    <p>A <strong>EVAUPA</strong> nasceu com o propósito de transformar ideias em soluções digitais úteis, acessíveis e criativas. Desenvolvemos aplicativos pensados para resolver necessidades reais do dia a dia, desde organização pessoal, compras e estoque doméstico, até ferramentas voltadas para logística, compartilhamento de arquivos e produtividade.</p>
+                    <p>Também exploramos o universo do entretenimento digital, criando conteúdos com inteligência artificial para canais no YouTube, TikTok, Instagram e outras plataformas — sempre com foco em narrativas, experiências visuais e conexão com o público.</p>
+                    <p style="color: var(--neon-blue); font-weight: 600; margin-top: 1.5rem;">Nossa missão é criar tecnologia com respeito, criatividade e compromisso com quem usa.</p>
+                </div>
+                <div class="about-visual reveal reveal-delay-2">
+                    <div class="about-card">
+                        <div class="about-card-content">
+                            <div class="stat-row">
+                                <div class="stat-item"><div class="stat-number">2+</div><div class="stat-label">Aplicativos</div></div>
+                                <div class="stat-item"><div class="stat-number">IA</div><div class="stat-label">Inteligência Artificial</div></div>
+                            </div>
+                            <div class="stat-row">
+                                <div class="stat-item"><div class="stat-number">∞</div><div class="stat-label">Possibilidades</div></div>
+                                <div class="stat-item"><div class="stat-number">100%</div><div class="stat-label">Compromisso</div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Aplicativos -->
+    <section class="apps" id="aplicativos">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>Nossos aplicativos</h2>
+                <p>Soluções digitais pensadas para facilitar o dia a dia</p>
+            </div>
+            <div class="apps-grid">
+                <div class="app-card reveal">
+                    <div class="app-icon">
+                        <img src="images/omnihome_icon.png" alt="OmniHome">
+                    </div>
+                    <h3>OmniHome</h3>
+                    <p>Aplicativo de assistência pessoal para organização de estoque, compras e controle de itens do dia a dia. Ideal para uso em casa, supermercados, pequenos negócios ou qualquer situação onde seja necessário organizar produtos, listas e necessidades de compra com praticidade.</p>
+                    <span class="app-status status-dev">🛠 Em desenvolvimento</span>
+                    <a href="#" class="btn btn-secondary">Ver projeto →</a>
+                </div>
+                <div class="app-card reveal reveal-delay-2">
+                    <div class="app-icon">
+                        <img src="images/docfrete_icon.png" alt="DocFrete">
+                    </div>
+                    <h3>Assistente de Arquivos Logísticos</h3>
+                    <p>Ferramenta criada para facilitar o compartilhamento de arquivos importantes relacionados à logística, como documentos, comprovantes e informações operacionais. O objetivo é economizar tempo, organizar processos e tornar o envio de arquivos pelo WhatsApp ou outros canais muito mais rápido e prático.</p>
+                    <span class="app-status status-dev">🛠 Em desenvolvimento</span>
+                    <a href="#" class="btn btn-secondary">Ver projeto →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Entretenimento -->
+    <section class="entertainment" id="entretenimento">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>Entretenimento com inteligência artificial</h2>
+                <p>A EVAUPA também cria conteúdos digitais e experiências de entretenimento usando inteligência artificial, unindo narrativa, imaginação e tecnologia.</p>
+            </div>
+            <div class="ent-cards">
+                <div class="ent-card reveal"><div class="ent-icon">📖</div><h4>Histórias para vídeos</h4><p>Roteiros e narrativas envolventes para conteúdo digital</p></div>
+                <div class="ent-card reveal reveal-delay-1"><div class="ent-icon">📱</div><h4>Conteúdo para redes sociais</h4><p>Conteúdo otimizado para YouTube, TikTok e Instagram</p></div>
+                <div class="ent-card reveal reveal-delay-2"><div class="ent-icon">🎨</div><h4>Projetos visuais com IA</h4><p>Arte e design gerados por inteligência artificial</p></div>
+                <div class="ent-card reveal reveal-delay-3"><div class="ent-icon">✨</div><h4>Identidade criativa para canais</h4><p>Branding e identidade visual para criadores de conteúdo</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Diferenciais -->
+    <section class="differentials" id="diferenciais">
+        <div class="container">
+            <div class="section-header reveal"><h2>Por que escolher a EVAUPA?</h2></div>
+            <div class="diff-grid">
+                <div class="diff-card reveal"><div class="diff-icon">🎯</div><h4>Soluções para problemas reais</h4><p>Criamos aplicativos pensados para facilitar situações comuns do dia a dia.</p></div>
+                <div class="diff-card reveal reveal-delay-1"><div class="diff-icon">💡</div><h4>Criatividade com tecnologia</h4><p>Unimos imaginação, inteligência artificial e desenvolvimento digital.</p></div>
+                <div class="diff-card reveal reveal-delay-2"><div class="diff-icon">🔧</div><h4>Projetos personalizados</h4><p>Cada ideia é tratada com atenção, buscando atender à necessidade de cada público.</p></div>
+                <div class="diff-card reveal reveal-delay-3"><div class="diff-icon">⚡</div><h4>Foco em praticidade</h4><p>Nossos projetos são pensados para serem simples, úteis e acessíveis.</p></div>
+                <div class="diff-card reveal reveal-delay-1"><div class="diff-icon">🤝</div><h4>Compromisso com respeito</h4><p>Valorizamos o usuário, o público e a experiência de quem utiliza nossas soluções.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfólio -->
+    <section class="portfolio" id="portfolio">
+        <div class="container">
+            <div class="section-header reveal"><h2>Portfólio visual</h2><p>Explore nossas áreas de atuação</p></div>
+            <div class="portfolio-grid">
+                <div class="portfolio-item reveal"><div class="portfolio-icon">📱</div><h4>Aplicativos</h4><p>Soluções mobile para o dia a dia</p></div>
+                <div class="portfolio-item reveal reveal-delay-1"><div class="portfolio-icon">🎬</div><h4>Conteúdo digital</h4><p>Vídeos e produções para redes sociais</p></div>
+                <div class="portfolio-item reveal reveal-delay-2"><div class="portfolio-icon">🚀</div><h4>Soluções digitais</h4><p>Ferramentas para produtividade e organização</p></div>
+                <div class="portfolio-item reveal reveal-delay-1"><div class="portfolio-icon">🌌</div><h4>Conceitos visuais futuristas</h4><p>Design espacial e inovador</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta" id="contato">
+        <div class="cta-bg"></div>
+        <div class="container">
+            <h2 class="reveal">Tem uma ideia? A EVAUPA pode ajudar a transformar em realidade.</h2>
+            <p class="reveal reveal-delay-1">Seja para desenvolver um aplicativo, criar um projeto digital, organizar uma solução para o dia a dia ou construir conteúdos para redes sociais, a EVAUPA está pronta para explorar novas possibilidades com você.</p>
+            <a href="https://wa.me/" class="btn btn-primary reveal reveal-delay-2" target="_blank">💬 Entrar em contato</a>
+        </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="#" class="logo">
+                    <img src="images/logo_evaupa.png" alt="EVAUPA Logo">
+                    EVAUPA
+                </a>
+                <p>Criatividade, tecnologia e soluções digitais para o dia a dia.</p>
+                <div class="social-links">
+                    <a href="#" title="YouTube">▶️</a>
+                    <a href="#" title="TikTok">🎵</a>
+                    <a href="#" title="Instagram">📷</a>
+                    <a href="#" title="WhatsApp">💬</a>
+                    <a href="#" title="E-mail">✉️</a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Links</h4>
+                <ul>
+                    <li><a href="#inicio">Início</a></li>
+                    <li><a href="#sobre">Sobre</a></li>
+                    <li><a href="#aplicativos">Aplicativos</a></li>
+                    <li><a href="#entretenimento">Entretenimento</a></li>
+                    <li><a href="#contato">Contato</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Projetos</h4>
+                <ul>
+                    <li><a href="#">OmniHome</a></li>
+                    <li><a href="#">DocFrete</a></li>
+                    <li><a href="#">Conteúdo Digital</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="#">YouTube</a></li>
+                    <li><a href="#">TikTok</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">WhatsApp</a></li>
+                    <li><a href="#">E-mail</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 EVAUPA. Todos os direitos reservados. 🚀</p>
+        </div>
+    </footer>
+
+    <!-- WhatsApp -->
+    <a href="https://wa.me/" class="whatsapp-float" target="_blank" title="Fale conosco no WhatsApp">💬</a>
+
+    <script>
+        // Partículas
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null };
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.5 + 0.2;
+                this.color = Math.random() > 0.5 ? '0, 212, 255' : '168, 85, 247';
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (mouse.x != null) {
+                    const dx = mouse.x - this.x;
+                    const dy = mouse.y - this.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 150) {
+                        const force = (150 - distance) / 150;
+                        this.x -= dx * force * 0.02;
+                        this.y -= dy * force * 0.02;
+                    }
+                }
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const particleCount = Math.min(window.innerWidth / 8, 150);
+            for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+        }
+        initParticles();
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(0, 212, 255, ${0.1 * (1 - distance / 100)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // Mouse glow
+        const mouseGlow = document.getElementById('mouseGlow');
+        document.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+            mouseGlow.style.left = e.clientX + 'px';
+            mouseGlow.style.top = e.clientY + 'px';
+        });
+
+        // Nav scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Reveal animations
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // Stars
+        function createStars() {
+            const hero = document.querySelector('.hero');
+            for (let i = 0; i < 50; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                hero.appendChild(star);
+            }
+        }
+        createStars();
+
+        // 3D cards
+        document.querySelectorAll('.app-card, .portfolio-item').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    </script>
+</body>
+</html>
