@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Conheça o OmniHome, aplicativo da EVAUPA para listas de compras, estoque doméstico, scanner e backup.">
+    <title>OmniHome — Compras e estoque em um só lugar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --space-dark: #0a0a1a;
+            --space-deep: #10102b;
+            --green: #10b981;
+            --green-dark: #047857;
+            --cyan: #00d4ff;
+            --white: #ffffff;
+            --muted: #adb4cb;
+            --surface: rgba(255, 255, 255, 0.06);
+            --border: rgba(255, 255, 255, 0.12);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Outfit', sans-serif; background: var(--space-dark); color: var(--white); line-height: 1.6; }
+        a { color: inherit; }
+        nav { position: fixed; inset: 0 0 auto; z-index: 20; background: rgba(10,10,26,.9); border-bottom: 1px solid var(--border); backdrop-filter: blur(18px); }
+        .nav-inner { width: min(1180px, calc(100% - 40px)); min-height: 72px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+        .brand { display: inline-flex; align-items: center; gap: 10px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; text-decoration: none; font-size: 1.3rem; }
+        .brand img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
+        .nav-links { display: flex; align-items: center; gap: 24px; list-style: none; }
+        .nav-links a { color: var(--muted); text-decoration: none; font-weight: 600; }
+        .nav-links a:hover, .nav-links a:focus-visible { color: var(--cyan); }
+        .hero { min-height: 92vh; display: flex; align-items: center; position: relative; isolation: isolate; padding: 120px 20px 70px; background: url('images/wallpaper.jpg') center/cover no-repeat; }
+        .hero::before { content: ''; position: absolute; inset: 0; z-index: -1; background: rgba(5, 10, 24, .84); }
+        .hero-inner { width: min(1180px, 100%); margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 420px); gap: 64px; align-items: center; }
+        .eyebrow { color: #6ee7b7; font-weight: 700; margin-bottom: 14px; }
+        h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(3rem, 8vw, 6rem); line-height: 1; margin-bottom: 20px; }
+        .hero p { max-width: 680px; color: #d6daea; font-size: clamp(1.05rem, 2vw, 1.3rem); }
+        .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+        .btn { min-height: 48px; padding: 12px 20px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; border: 1px solid transparent; }
+        .btn-primary { background: var(--green); color: #041611; }
+        .btn-primary:hover { background: #34d399; }
+        .btn-secondary { border-color: var(--border); background: rgba(255,255,255,.04); }
+        .btn-secondary:hover { border-color: var(--cyan); }
+        .app-showcase { display: grid; place-items: center; }
+        .app-icon { width: min(70vw, 300px); aspect-ratio: 1; border-radius: 28%; object-fit: cover; box-shadow: 0 28px 80px rgba(16,185,129,.3); }
+        .band { padding: 80px 20px; }
+        .band-alt { background: var(--space-deep); border-block: 1px solid var(--border); }
+        .content { width: min(1180px, 100%); margin: 0 auto; }
+        .section-heading { max-width: 720px; margin-bottom: 36px; }
+        .section-heading h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2rem, 5vw, 3.2rem); margin-bottom: 10px; }
+        .section-heading p { color: var(--muted); font-size: 1.08rem; }
+        .feature-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+        .feature { min-height: 170px; padding: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; }
+        .feature strong { display: block; font-size: 1.16rem; margin-bottom: 8px; }
+        .feature p { color: var(--muted); }
+        .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .plan { padding: 10px 0 10px 24px; border-left: 3px solid var(--cyan); }
+        .plan.pro { border-color: var(--green); }
+        .plan h3 { font-size: 1.6rem; margin-bottom: 14px; }
+        .plan ul { list-style: none; display: grid; gap: 9px; color: var(--muted); }
+        .plan li::before { content: '✓'; color: var(--green); margin-right: 10px; font-weight: 800; }
+        .privacy-callout { display: flex; justify-content: space-between; align-items: center; gap: 30px; }
+        .privacy-callout p { color: var(--muted); max-width: 700px; }
+        footer { border-top: 1px solid var(--border); padding: 30px 20px; color: var(--muted); }
+        .footer-inner { width: min(1180px, 100%); margin: 0 auto; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+        footer a { color: var(--muted); }
+        footer a:hover { color: var(--cyan); }
+        @media (max-width: 820px) {
+            .hero { min-height: auto; }
+            .hero-inner { grid-template-columns: 1fr; text-align: center; }
+            .hero p { margin-inline: auto; }
+            .actions { justify-content: center; }
+            .app-showcase { order: -1; }
+            .app-icon { width: 180px; }
+            .feature-grid { grid-template-columns: 1fr 1fr; }
+            .privacy-callout { align-items: flex-start; flex-direction: column; }
+        }
+        @media (max-width: 560px) {
+            .nav-links { gap: 12px; }
+            .nav-links li:first-child { display: none; }
+            .feature-grid, .plan-grid { grid-template-columns: 1fr; }
+            .band { padding: 60px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <nav aria-label="Navegação principal">
+        <div class="nav-inner">
+            <a class="brand" href="index.html"><img src="images/logo_evaupa.png" alt="">EVAUPA</a>
+            <ul class="nav-links">
+                <li><a href="index.html#aplicativos">Projetos</a></li>
+                <li><a href="politica-de-privacidade-omnihome.html">Privacidade</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="hero-inner">
+                <div>
+                    <p class="eyebrow">Um projeto EVAUPA para a rotina da casa</p>
+                    <h1>OmniHome</h1>
+                    <p>Listas de compras, progresso no mercado, scanner e estoque doméstico em um só aplicativo. Mais organização para comprar melhor e reduzir desperdícios.</p>
+                    <div class="actions">
+                        <a class="btn btn-primary" href="#recursos">Conhecer recursos</a>
+                        <a class="btn btn-secondary" href="politica-de-privacidade-omnihome.html">Política de Privacidade</a>
+                    </div>
+                </div>
+                <div class="app-showcase">
+                    <img class="app-icon" src="images/omnihome_icon.png" alt="Ícone do aplicativo OmniHome">
+                </div>
+            </div>
+        </section>
+
+        <section class="band" id="recursos">
+            <div class="content">
+                <div class="section-heading"><h2>Uma rotina mais organizada</h2><p>O OmniHome transforma tarefas domésticas repetitivas em um fluxo simples e prático.</p></div>
+                <div class="feature-grid">
+                    <article class="feature"><strong>Lista de compras</strong><p>Crie, cole e organize itens antes de ir ao mercado.</p></article>
+                    <article class="feature"><strong>Progresso do carrinho</strong><p>Marque cada produto e acompanhe o que ainda falta.</p></article>
+                    <article class="feature"><strong>Estoque doméstico</strong><p>Envie produtos comprados para a despensa, geladeira ou freezer.</p></article>
+                    <article class="feature"><strong>Scanner de código de barras</strong><p>Use a câmera para registrar produtos com mais rapidez.</p></article>
+                    <article class="feature"><strong>Histórico e exportação</strong><p>Consulte compras anteriores e compartilhe sua lista.</p></article>
+                    <article class="feature"><strong>Backup opcional</strong><p>Mantenha os dados no celular ou use recursos de backup quando disponíveis.</p></article>
+                </div>
+            </div>
+        </section>
+
+        <section class="band band-alt">
+            <div class="content">
+                <div class="section-heading"><h2>Útil no Free, mais confortável no Pro</h2><p>A base do aplicativo continua funcional; o Pro foi pensado para automação, segurança e comodidade.</p></div>
+                <div class="plan-grid">
+                    <div class="plan"><h3>OmniHome Free</h3><ul><li>Listas e estoque básico</li><li>Scanner com limite de uso</li><li>Backup local</li><li>Anúncios leves</li></ul></div>
+                    <div class="plan pro"><h3>OmniHome Pro</h3><ul><li>Sem anúncios</li><li>Assistente Omni local</li><li>Mais histórico, locais e fotos</li><li>Backup em nuvem e sincronização planejada</li></ul></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="band">
+            <div class="content privacy-callout">
+                <div><div class="section-heading" style="margin-bottom:0"><h2>Privacidade com clareza</h2></div><p>Conheça como o OmniHome trata dados locais, câmera, fotos, anúncios e o backup opcional no Google Drive.</p></div>
+                <a class="btn btn-secondary" href="politica-de-privacidade-omnihome.html">Ler a política</a>
+            </div>
+        </section>
+    </main>
+
+    <footer><div class="footer-inner"><span>© 2026 EVAUPA. Todos os direitos reservados.</span><a href="index.html">Voltar ao site EVAUPA</a></div></footer>
+</body>
+</html>
