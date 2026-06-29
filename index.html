@@ -682,20 +682,36 @@
         .social-links a {
             width: 40px; height: 40px;
             border-radius: 12px;
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.22), rgba(168, 85, 247, 0.22));
+            border: 1px solid rgba(0, 212, 255, 0.35);
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--white);
             text-decoration: none;
             font-size: 1.1rem;
+            box-shadow: 0 0 18px rgba(0, 212, 255, 0.22), 0 0 28px rgba(168, 85, 247, 0.12);
             transition: all 0.3s ease;
         }
         .social-links a:hover {
-            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
-            border-color: transparent;
+            background: var(--glass);
+            border-color: var(--glass-border);
             transform: translateY(-3px);
+            box-shadow: none;
+            opacity: 0.65;
+        }
+        .social-links a img {
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.45));
+            transition: transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
+        }
+        .social-links a:hover img {
+            transform: scale(0.94);
+            filter: none;
+            opacity: 0.72;
         }
         .footer-bottom {
             text-align: center;
@@ -726,6 +742,12 @@
         .whatsapp-float:hover {
             transform: scale(1.1);
             box-shadow: 0 5px 35px rgba(37, 211, 102, 0.6);
+        }
+        .whatsapp-float img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            display: block;
         }
         @keyframes whatsapp-pulse {
             0%, 100% { box-shadow: 0 5px 25px rgba(37, 211, 102, 0.4); }
@@ -971,12 +993,26 @@
                 </a>
                 <p>Criatividade, tecnologia e soluções digitais para o dia a dia.</p>
                 <div class="social-links">
-                    <a href="#" title="YouTube">▶️</a>
-                    <a href="#" title="TikTok">🎵</a>
-                    <a href="#" title="Instagram">📷</a>
-                    <a href="#" title="WhatsApp">💬</a>
-                    <a href="#" title="E-mail">✉️</a>
-                </div>
+    <a href="https://www.youtube.com/@EVAUPA" title="YouTube" target="_blank">
+        <img src="images/social/youtube.svg" alt="YouTube">
+    </a>
+
+    <a href="https://www.tiktok.com/@evaupa" title="TikTok" target="_blank">
+        <img src="images/social/tiktok.svg" alt="TikTok">
+    </a>
+
+    <a href="https://www.instagram.com/evaupa.work/" title="Instagram" target="_blank">
+        <img src="images/social/instagram.svg" alt="Instagram">
+    </a>
+
+    <a href="https://wa.me/5582999999999" title="WhatsApp" target="_blank">
+        <img src="images/social/whatsapp.svg" alt="WhatsApp">
+    </a>
+
+    <a href="mailto:info@evaupa.com" title="E-mail">
+        <img src="images/social/email.svg" alt="E-mail">
+    </a>
+</div>
             </div>
             <div class="footer-links">
                 <h4>Links</h4>
@@ -1017,7 +1053,9 @@
     </footer>
 
     <!-- WhatsApp -->
-    <a href="https://wa.me/" class="whatsapp-float" target="_blank" title="Fale conosco no WhatsApp">💬</a>
+    <a href="https://wa.me/" class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="Fale conosco no WhatsApp" aria-label="Fale conosco no WhatsApp">
+        <img src="images/social/whatsapp.svg" alt="WhatsApp">
+    </a>
 
     <script>
         // Partículas
