@@ -62,6 +62,7 @@
         .plan li::before { content: '✓'; color: var(--green); margin-right: 10px; font-weight: 800; }
         .privacy-callout { display: flex; justify-content: space-between; align-items: center; gap: 30px; }
         .privacy-callout p { color: var(--muted); max-width: 700px; }
+        .privacy-actions { display: flex; flex-wrap: wrap; gap: 12px; }
         footer { border-top: 1px solid var(--border); padding: 30px 20px; color: var(--muted); }
         .footer-inner { width: min(1180px, 100%); margin: 0 auto; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
         footer a { color: var(--muted); }
@@ -91,6 +92,7 @@
             <ul class="nav-links">
                 <li><a href="index.html#aplicativos">Projetos</a></li>
                 <li><a href="politica-de-privacidade-omnihome.html">Privacidade</a></li>
+                <li><a href="omnihome/excluir-conta/">Excluir conta</a></li>
             </ul>
         </div>
     </nav>
@@ -140,7 +142,10 @@
         <section class="band">
             <div class="content privacy-callout">
                 <div><div class="section-heading" style="margin-bottom:0"><h2>Privacidade com clareza</h2></div><p>Conheça como o OmniHome trata dados locais, câmera, fotos, anúncios e o backup opcional no Google Drive.</p></div>
-                <a class="btn btn-secondary" href="politica-de-privacidade-omnihome.html">Ler a política</a>
+                <div class="privacy-actions">
+                    <a class="btn btn-secondary" href="politica-de-privacidade-omnihome.html">Ler a política</a>
+                    <a class="btn btn-secondary" href="omnihome/excluir-conta/">Excluir minha conta</a>
+                </div>
             </div>
         </section>
     </main>
