@@ -33,40 +33,165 @@
     <header><div class="header-inner"><a class="brand" href="index.html"><img src="images/logo_evaupa.png" alt="">EVAUPA</a><a class="back" href="omnihome.html">Voltar ao OmniHome</a></div></header>
     <main>
         <h1>Política de Privacidade do OmniHome</h1>
-        <p class="updated">Última atualização: 24 de junho de 2026.</p>
+        <p class="updated">Última atualização: 24 de agosto de 2026.</p>
 
-        <p>Esta Política de Privacidade descreve como o aplicativo OmniHome: Compras e Estoque, desenvolvido por EVAUPA Creativity technology and digital solutions, trata informações durante o uso do aplicativo.</p>
+        <p>Esta Política de Privacidade descreve como o aplicativo OmniHome: Compras e Estoque, desenvolvido por EVAUPA Creativity technology and digital solutions (“EVAUPA”), trata informações durante o uso do aplicativo e de seus serviços associados.</p>
+        <p>O OmniHome adota uma arquitetura prioritariamente local. Algumas funcionalidades opcionais utilizam serviços externos de autenticação, backup, assinatura, publicidade e inteligência artificial, conforme descrito nesta Política.</p>
 
         <h2>1. Dados armazenados no dispositivo</h2>
-        <p>O OmniHome pode armazenar localmente listas de compras, estoque doméstico, histórico de compras, preços, locais da casa, datas de validade, fotos de produtos, configurações e registros de ações. Esses dados permanecem no dispositivo, salvo quando o usuário escolhe usar uma função de backup ou compartilhamento.</p>
+        <p>O OmniHome pode armazenar localmente informações necessárias às suas funcionalidades, incluindo listas de compras, estoque doméstico, locais de armazenamento, histórico, preços, datas de validade e fabricação, categorias personalizadas, registros de ações, configurações e fotografias adicionadas aos produtos.</p>
+        <p>Essas informações permanecem no dispositivo, salvo quando o usuário utiliza voluntariamente uma funcionalidade que exige transmissão ou backup externo.</p>
+        <p>Os dados locais podem ser removidos pelo próprio aplicativo, pelas configurações de armazenamento do Android ou pela desinstalação do OmniHome, conforme o caso.</p>
 
-        <h2>2. Câmera e fotos</h2>
-        <p>A permissão da câmera é utilizada para ler códigos de barras e, quando solicitado pelo usuário, adicionar fotos aos produtos. O scanner não envia imagens da câmera ao desenvolvedor. Fotos adicionadas aos produtos podem fazer parte de um backup escolhido pelo usuário.</p>
+        <h2>2. Câmera, códigos de barras e fotografias</h2>
+        <p>O OmniHome pode utilizar a câmera para leitura de códigos de barras e para adicionar fotografias aos produtos quando solicitado pelo usuário.</p>
+        <p>O uso comum do scanner não implica envio contínuo das imagens da câmera à EVAUPA.</p>
+        <p>Fotografias adicionadas aos produtos podem permanecer armazenadas localmente e podem ser incluídas no backup do Google Drive quando o usuário utilizar essa funcionalidade.</p>
 
-        <h2>3. Login Google e Google Drive</h2>
-        <p>O login Google é opcional e serve para autorizar recursos de backup no Google Drive. Com a autorização do usuário, o aplicativo pode acessar nome, endereço de e-mail, identificador da conta e foto de perfil. O backup pode conter os dados do OmniHome e fotos adicionadas aos produtos, sendo armazenado na área privada de dados do aplicativo no Google Drive do próprio usuário.</p>
-        <p>O OmniHome não cria uma conta própria em servidor e não recebe a senha da conta Google. O usuário pode continuar utilizando as funções principais sem fazer login.</p>
+        <h2>3. Login Google e Firebase Authentication</h2>
+        <p>O login com Google é opcional para as funcionalidades básicas do OmniHome, mas é necessário para determinados recursos vinculados a uma identidade autenticada.</p>
+        <p>O OmniHome utiliza o Firebase Authentication, fornecido pelo Google, para criar ou reconhecer a identidade do usuário no aplicativo.</p>
+        <p>Conforme disponibilizado pelo provedor de autenticação, essa identidade pode envolver informações básicas como nome, endereço de e-mail e foto de perfil, além do identificador técnico Firebase UID utilizado internamente para autenticação.</p>
+        <p>No armazenamento local do perfil Google utilizado pelo OmniHome são mantidos nome, endereço de e-mail e URL da foto de perfil.</p>
+        <p>O OmniHome não recebe nem armazena a senha da Conta Google.</p>
+        <p>A identidade criada para o OmniHome é independente da Conta Google. Excluir a conta do OmniHome não exclui a Conta Google, o Gmail ou outros serviços Google.</p>
 
-        <h2>4. Anúncios e AdMob</h2>
-        <p>A versão gratuita utiliza o Google AdMob. O Google Mobile Ads SDK pode coletar e compartilhar endereço IP, usado para estimar localização aproximada, interações com o aplicativo, informações de diagnóstico e identificadores do dispositivo ou da conta. Esses dados podem ser usados para publicidade, análise e prevenção contra fraudes, conforme as políticas do Google.</p>
+        <h2>4. Backend e autenticação</h2>
+        <p>Algumas funcionalidades utilizam o backend do OmniHome, hospedado em infraestrutura do Google Cloud.</p>
+        <p>Solicitações protegidas podem utilizar credenciais temporárias de autenticação para verificar a identidade do usuário e controlar o acesso a recursos protegidos.</p>
+        <p>O Firebase UID pode ser utilizado temporariamente em memória para autenticação, controle de requisições e cache. Nos eventos de entitlement que exigem correlação técnica, é utilizado um pseudônimo curto derivado criptograficamente do UID, e não o UID completo.</p>
+        <p>O backend não mantém atualmente um banco próprio persistente contendo listas de compras, estoque, histórico ou fotografias dos usuários.</p>
 
-        <h2>5. Compartilhamento de dados</h2>
-        <p>O desenvolvedor não vende dados pessoais. Informações podem ser processadas por serviços do Google necessários ao funcionamento de anúncios, autenticação e backup, incluindo Google AdMob, Google Sign-In e Google Drive, de acordo com as escolhas do usuário e as políticas desses serviços.</p>
+        <h2>5. Assinatura Premium e Google Play</h2>
+        <p>O OmniHome oferece recursos Premium por meio das assinaturas do Google Play.</p>
+        <p>Para verificar o direito de acesso a esses recursos, informações técnicas da compra podem ser processadas pelo aplicativo, pelo backend do OmniHome e pelos serviços do Google Play.</p>
+        <p>Isso inclui informações necessárias para verificar a existência, validade e vínculo da assinatura.</p>
+        <p>Tokens de compra são utilizados durante o processo técnico de validação, mas não são incluídos no backup do OmniHome e não são intencionalmente registrados nos logs da aplicação.</p>
+        <p>A exclusão da conta OmniHome não cancela, reembolsa ou modifica automaticamente uma assinatura Google Play.</p>
+        <p>O gerenciamento e o cancelamento da assinatura são realizados pelos mecanismos disponibilizados pelo Google Play.</p>
 
-        <h2>6. Segurança</h2>
-        <p>As comunicações com os serviços do Google utilizam conexões criptografadas em trânsito. Nenhum método de armazenamento ou transmissão é totalmente infalível, mas são adotadas medidas compatíveis com os serviços utilizados pelo aplicativo.</p>
+        <h2>6. Recursos de inteligência artificial — Premium</h2>
+        <p>Os recursos de inteligência artificial do OmniHome são destinados aos usuários Premium.</p>
+        <p>Quando uma funcionalidade de IA é utilizada, informações necessárias àquela solicitação, como o texto do item informado pelo usuário e sua localidade/idioma, podem ser transmitidas ao backend para processamento.</p>
+        <p>O OmniHome pode utilizar provedores externos de inteligência artificial, atualmente incluindo Groq e Google Gemini, conforme disponibilidade técnica.</p>
+        <p>Esses serviços podem ser utilizados para tarefas como normalização de nomes de produtos, correção de erros de digitação e melhoria da interpretação das informações fornecidas pelo usuário.</p>
+        <p>O texto original enviado para processamento de IA não é intencionalmente registrado nos logs da aplicação.</p>
+        <p>No fluxo Free, as funcionalidades de IA Premium não são chamadas.</p>
+        <p>A EVAUPA não utiliza intencionalmente o conteúdo enviado à IA para criar perfis publicitários do usuário.</p>
+        <p>O processamento realizado por provedores externos também está sujeito às respectivas práticas e políticas de privacidade desses prestadores.</p>
 
-        <h2>7. Controle e exclusão</h2>
-        <p>Os dados locais podem ser removidos pelas configurações de armazenamento do Android ou pela desinstalação do OmniHome. O usuário também pode desconectar a conta Google pelo aplicativo e gerenciar autorizações de terceiros nas configurações da Conta Google. Dados de backup armazenados no Google Drive podem ser gerenciados nas configurações de aplicativos do Google Drive.</p>
+        <h2>7. Google Drive e backup</h2>
+        <p>Usuários elegíveis podem utilizar a funcionalidade de backup no Google Drive.</p>
+        <p>O OmniHome utiliza a área privada destinada aos dados do aplicativo no Google Drive (appDataFolder).</p>
+        <p>O arquivo de backup pode conter, conforme os dados existentes no aplicativo:</p>
+        <ul>
+            <li>listas de compras e respectivos metadados;</li>
+            <li>estoque, produtos, marcas, códigos de barras, quantidades e locais;</li>
+            <li>preços;</li>
+            <li>datas de validade e fabricação;</li>
+            <li>histórico de compras;</li>
+            <li>categorias;</li>
+            <li>tipos e locais personalizados;</li>
+            <li>registros de ações;</li>
+            <li>fotografias dos produtos;</li>
+            <li>configurações;</li>
+            <li>nome, e-mail e URL da foto do perfil Google;</li>
+            <li>identificador técnico do arquivo de backup no Drive;</li>
+            <li>datas relacionadas ao backup e aos dados armazenados.</li>
+        </ul>
+        <p>O backup não contém Firebase UID, Firebase ID token, Google ID token, Google access token, refresh token, purchase token, server auth code, client secrets, chaves privadas ou credenciais dos provedores de IA.</p>
+        <p>Informações internas de Billing também são removidas antes da criação do backup.</p>
+        <p>O acesso ao Drive utiliza exclusivamente o escopo:</p>
+        <p>https://www.googleapis.com/auth/drive.appdata</p>
+        <p>Esse escopo limita o OmniHome aos dados privados do próprio aplicativo e não concede acesso geral aos arquivos comuns armazenados pelo usuário no Google Drive.</p>
 
-        <h2>8. Crianças</h2>
-        <p>O OmniHome é destinado à organização doméstica por adultos e não foi desenvolvido para crianças.</p>
+        <h2>8. Anúncios</h2>
+        <p>A versão gratuita do OmniHome utiliza o Google AdMob.</p>
+        <p>O Google Mobile Ads SDK pode processar informações como endereço IP, localização aproximada derivada do IP, identificadores do dispositivo ou da conta, interações com anúncios e informações técnicas ou de diagnóstico.</p>
+        <p>Essas informações podem ser utilizadas pelo Google para finalidades como publicidade, análise, segurança e prevenção contra fraude, conforme suas próprias políticas.</p>
+        <p>Usuários com entitlement Premium válido não recebem os anúncios destinados à versão gratuita.</p>
 
-        <h2>9. Alterações nesta política</h2>
-        <p>Esta política pode ser atualizada quando houver mudanças no aplicativo, nos serviços utilizados ou nas exigências legais. A data da revisão mais recente será exibida no início desta página.</p>
+        <h2>9. Compartilhamento e prestadores de serviços</h2>
+        <p>A EVAUPA não vende dados pessoais dos usuários.</p>
+        <p>Dependendo das funcionalidades utilizadas, informações podem ser processadas por prestadores necessários à operação do OmniHome, incluindo:</p>
+        <ul>
+            <li>Google Firebase Authentication;</li>
+            <li>Google Cloud;</li>
+            <li>Google Play;</li>
+            <li>Google Drive;</li>
+            <li>Google AdMob;</li>
+            <li>Google Gemini;</li>
+            <li>Groq.</li>
+        </ul>
+        <p>O tratamento realizado por esses prestadores também está sujeito às respectivas políticas e condições aplicáveis.</p>
 
-        <h2>10. Contato</h2>
-        <p>Para dúvidas sobre privacidade, entre em contato com EVAUPA Creativity technology and digital solutions pelo e-mail <a href="mailto:evaupa.work@gmail.com">evaupa.work@gmail.com</a>.</p>
+        <h2>10. Logs técnicos</h2>
+        <p>A infraestrutura pode gerar logs técnicos necessários para operação, diagnóstico, segurança e prevenção contra abuso.</p>
+        <p>Esses logs podem incluir informações como endereço IP, user-agent, URL e método HTTP, status da resposta, latência, tamanhos da requisição e resposta, referências técnicas de requisição, trace, instância e revisão, além de resultados técnicos de autenticação, entitlement, cache e provedor utilizado.</p>
+        <p>O código atual foi projetado para não registrar intencionalmente:</p>
+        <ul>
+            <li>Firebase ID tokens;</li>
+            <li>purchase tokens;</li>
+            <li>cabeçalhos Authorization;</li>
+            <li>Google access tokens;</li>
+            <li>refresh tokens;</li>
+            <li>client secrets;</li>
+            <li>chaves dos provedores de IA;</li>
+            <li>Firebase UID completo;</li>
+            <li>texto original enviado à IA.</li>
+        </ul>
+        <p>Cabeçalhos sensíveis conhecidos são redigidos nos mecanismos de logging da aplicação.</p>
+        <p>Os logs comuns armazenados no bucket padrão _Default do Google Cloud Logging possuem atualmente retenção de 30 dias.</p>
+        <p>Determinados logs obrigatórios de auditoria mantidos pelo Google no bucket _Required possuem atualmente retenção de 400 dias.</p>
+        <p>Esses períodos decorrem da configuração atualmente aplicada pelo Google Cloud Logging e podem ser alterados futuramente de acordo com mudanças legítimas na infraestrutura ou nas regras do provedor.</p>
+
+        <h2>11. Segurança</h2>
+        <p>A EVAUPA adota medidas técnicas destinadas a reduzir riscos de acesso não autorizado, uso indevido e exposição de informações.</p>
+        <p>Entre as medidas atualmente utilizadas estão comunicação criptografada em trânsito, autenticação Firebase, proteção de rotas, validação adicional de revogação em operações sensíveis, princípio de menor privilégio para permissões de infraestrutura, separação entre configurações públicas e credenciais privadas e tratamento destinado a impedir que tokens sensíveis sejam registrados nos logs da aplicação.</p>
+        <p>Nenhum sistema eletrônico de armazenamento ou transmissão pode garantir segurança absoluta.</p>
+
+        <h2>12. Retenção</h2>
+        <p>Os dados funcionais armazenados localmente permanecem no dispositivo enquanto não forem removidos pelo usuário, pelo sistema operacional ou pela desinstalação do aplicativo.</p>
+        <p>O backup armazenado no Google Drive permanece na área privada do aplicativo até ser substituído ou removido conforme as ações do usuário e o funcionamento do serviço.</p>
+        <p>A identidade Firebase permanece enquanto existir a conta OmniHome correspondente.</p>
+        <p>O backend não mantém atualmente banco próprio permanente com listas, estoque, histórico ou fotografias dos usuários.</p>
+        <p>Logs técnicos seguem os períodos descritos na seção anterior.</p>
+        <p>Informações mantidas diretamente por prestadores externos podem estar sujeitas aos respectivos períodos de retenção e obrigações desses serviços.</p>
+
+        <h2>13. Exclusão da conta e dos dados</h2>
+        <p>Usuários autenticados podem excluir sua conta OmniHome diretamente pelo aplicativo.</p>
+        <p>A EVAUPA também disponibiliza o recurso público:</p>
+        <p><a href="https://evaupa.com/omnihome/excluir-conta/">https://evaupa.com/omnihome/excluir-conta/</a></p>
+        <p>O processo exige autenticação e confirmação para reduzir o risco de exclusões não autorizadas.</p>
+        <p>A exclusão da conta remove a identidade Firebase correspondente.</p>
+        <p>No aplicativo, o usuário pode escolher separadamente se deseja apagar também os dados locais.</p>
+        <p>No fluxo compatível com Google Drive, o usuário pode optar por excluir o backup privado omnihome-backup.json. O acesso ao Drive é solicitado apenas quando essa opção é selecionada.</p>
+        <p>Se ocorrer uma falha ao acessar ou remover o backup, o usuário é informado antes da exclusão da conta e pode cancelar, tentar novamente ou decidir conscientemente prosseguir preservando o backup.</p>
+        <p>Excluir a conta OmniHome:</p>
+        <ul>
+            <li>não exclui a Conta Google;</li>
+            <li>não exclui o Gmail;</li>
+            <li>não cancela automaticamente uma assinatura Google Play;</li>
+            <li>não produz automaticamente reembolso de assinatura;</li>
+            <li>não apaga dados locais que o usuário tenha escolhido preservar;</li>
+            <li>não elimina necessariamente registros que um prestador externo seja obrigado ou autorizado a manter segundo suas próprias políticas ou obrigações legais.</li>
+        </ul>
+
+        <h2>14. Dados locais e exclusão pelo site</h2>
+        <p>A página web de exclusão não possui acesso remoto aos dados armazenados exclusivamente no aparelho.</p>
+        <p>Para remover esses dados, o usuário pode utilizar o fluxo correspondente dentro do OmniHome, as configurações de armazenamento do Android ou desinstalar o aplicativo, conforme aplicável.</p>
+
+        <h2>15. Crianças</h2>
+        <p>O OmniHome é destinado à organização doméstica e não foi desenvolvido especificamente para crianças.</p>
+        <p>O aplicativo não tem como finalidade coletar conscientemente dados pessoais de crianças.</p>
+
+        <h2>16. Alterações desta Política</h2>
+        <p>Esta Política poderá ser atualizada quando houver mudanças nas funcionalidades, serviços utilizados, práticas de tratamento de dados ou requisitos legais e regulatórios aplicáveis.</p>
+        <p>A data da revisão mais recente será indicada no início desta página.</p>
+
+        <h2>17. Contato</h2>
+        <p>Para dúvidas ou solicitações relacionadas à privacidade e ao tratamento de dados no OmniHome:</p>
+        <p>EVAUPA Creativity technology and digital solutions<br>Marca institucional: EVAUPA<br>E-mail: <a href="mailto:evaupa.work@gmail.com">evaupa.work@gmail.com</a></p>
     </main>
     <footer><div class="footer-inner"><span>© 2026 EVAUPA. Todos os direitos reservados.</span><a href="index.html">Site principal</a></div></footer>
 </body>
