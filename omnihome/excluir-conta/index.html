@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Página oficial da EVAUPA para exclusão segura da conta OmniHome.">
+    <meta name="robots" content="index, follow">
+    <title>Excluir conta OmniHome — EVAUPA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a1a;
+            --surface: #10102b;
+            --surface-soft: rgba(255,255,255,.055);
+            --text: #f7f8ff;
+            --muted: #b4bbd0;
+            --border: rgba(255,255,255,.13);
+            --cyan: #00d4ff;
+            --green: #34d399;
+            --danger: #fb7185;
+            --danger-dark: #be123c;
+            --warning: #fbbf24;
+        }
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { margin: 0; font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+        a { color: var(--cyan); }
+        header { border-bottom: 1px solid var(--border); background: rgba(16,16,43,.96); }
+        .header-inner, main, .footer-inner { width: min(940px, calc(100% - 40px)); margin: 0 auto; }
+        .header-inner { min-height: 74px; display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+        .brand { color: var(--text); text-decoration: none; font-family: 'Space Grotesk', sans-serif; font-weight: 700; display: inline-flex; align-items: center; gap: 10px; }
+        .brand img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
+        .back { text-decoration: none; font-weight: 600; }
+        main { padding: 64px 0 84px; }
+        .eyebrow { color: var(--green); font-weight: 700; margin: 0 0 8px; }
+        h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; line-height: 1.2; }
+        h1 { font-size: clamp(2.45rem, 7vw, 4.4rem); margin: 0 0 16px; max-width: 800px; }
+        h2 { font-size: clamp(1.55rem, 4vw, 2rem); margin: 0 0 12px; }
+        h3 { font-size: 1.12rem; margin: 0 0 7px; }
+        p, li { color: var(--muted); font-size: 1.02rem; }
+        .lead { max-width: 760px; font-size: 1.14rem; margin-bottom: 32px; }
+        .critical { margin: 20px 0; padding: 18px 20px; border-left: 4px solid var(--warning); background: rgba(251,191,36,.08); border-radius: 0 8px 8px 0; }
+        .critical strong { display: block; color: var(--text); font-size: 1.08rem; }
+        .critical p { margin: 4px 0 0; }
+        .grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; margin: 28px 0 48px; }
+        .card { padding: 22px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-soft); }
+        .card p { margin: 0; }
+        .card.delete h3 { color: var(--green); }
+        .card.keep h3 { color: var(--cyan); }
+        .steps { margin: 18px 0 0; padding-left: 24px; display: grid; gap: 8px; }
+        .panel { margin-top: 48px; padding: clamp(24px, 5vw, 38px); background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
+        .panel-header { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+        .app-icon { width: 58px; height: 58px; border-radius: 16px; object-fit: cover; }
+        .status { padding: 13px 15px; border-radius: 7px; background: rgba(0,212,255,.08); border: 1px solid rgba(0,212,255,.24); color: #d8f8ff; margin: 18px 0; }
+        .status.error { background: rgba(251,113,133,.08); border-color: rgba(251,113,133,.3); color: #fecdd3; }
+        .status.success { background: rgba(52,211,153,.08); border-color: rgba(52,211,153,.3); color: #d1fae5; }
+        .setup-notice { color: var(--warning); font-weight: 600; }
+        .auth-user { padding: 14px 16px; border: 1px solid var(--border); border-radius: 8px; margin: 18px 0; }
+        .auth-user strong, .auth-user span { display: block; }
+        .auth-user span { color: var(--muted); overflow-wrap: anywhere; }
+        .consent { display: flex; align-items: flex-start; gap: 10px; margin: 20px 0; color: var(--muted); }
+        .consent input { margin-top: 6px; accent-color: var(--danger); }
+        button { font: inherit; }
+        .button { min-height: 48px; padding: 12px 20px; border-radius: 7px; border: 1px solid transparent; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; cursor: pointer; }
+        .button-primary { background: var(--green); color: #041611; }
+        .button-danger { background: var(--danger-dark); color: white; }
+        .button-secondary { background: transparent; color: var(--text); border-color: var(--border); }
+        .button:disabled { opacity: .45; cursor: not-allowed; }
+        .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+        .fine-print { font-size: .93rem; }
+        dialog { width: min(560px, calc(100% - 32px)); padding: 0; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 30px 100px rgba(0,0,0,.6); }
+        dialog::backdrop { background: rgba(0,0,0,.72); }
+        .dialog-body { padding: 28px; }
+        .dialog-body h2 { color: var(--danger); }
+        .dialog-body label { display: block; margin: 18px 0 7px; font-weight: 600; }
+        .dialog-body input { width: 100%; min-height: 46px; padding: 10px 12px; border-radius: 7px; border: 1px solid var(--border); background: #080817; color: var(--text); font: inherit; }
+        .dialog-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+        footer { border-top: 1px solid var(--border); padding: 28px 0; color: var(--muted); }
+        .footer-inner { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+        [hidden] { display: none !important; }
+        @media (max-width: 680px) {
+            .grid { grid-template-columns: 1fr; }
+            main { padding-top: 44px; }
+            .header-inner { min-height: 68px; }
+            .back { font-size: .93rem; }
+            .actions .button { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <a class="brand" href="../../index.html"><img src="../../images/logo_evaupa.png" alt="">EVAUPA</a>
+            <a class="back" href="../../omnihome.html">Voltar ao OmniHome</a>
+        </div>
+    </header>
+
+    <main>
+        <p class="eyebrow">Privacidade e controle da conta</p>
+        <h1>Excluir sua conta OmniHome</h1>
+        <p class="lead">Esta é a página oficial da EVAUPA para excluir com segurança a identidade Firebase associada ao aplicativo OmniHome.</p>
+
+        <div class="critical">
+            <strong>Excluir sua conta OmniHome não exclui sua Conta Google ou Gmail.</strong>
+            <p>A exclusão alcança somente a identidade do OmniHome no Firebase Authentication.</p>
+        </div>
+        <div class="critical">
+            <strong>Excluir a conta OmniHome não cancela automaticamente uma assinatura ativa do Google Play.</strong>
+            <p>Assinaturas devem ser canceladas separadamente em <a href="https://play.google.com/store/account/subscriptions" rel="noopener noreferrer">Assinaturas no Google Play</a>.</p>
+        </div>
+
+        <section aria-labelledby="dados-title">
+            <h2 id="dados-title">O que acontece com seus dados</h2>
+            <div class="grid">
+                <article class="card delete"><h3>Conta Firebase do OmniHome</h3><p>É excluída após autenticação, reautenticação e confirmação explícita. A sessão web é encerrada ao final.</p></article>
+                <article class="card keep"><h3>Conta Google e Gmail</h3><p>Não são excluídos nem modificados. A EVAUPA não controla sua Conta Google.</p></article>
+                <article class="card keep"><h3>Listas e estoque no aparelho</h3><p>Não podem ser apagados por esta página. No aplicativo, você escolhe preservar ou apagar os dados locais durante a exclusão.</p></article>
+                <article class="card delete"><h3>Backup no Google Drive (opcional)</h3><p>Você pode autorizar separadamente a exclusão do backup privado <strong>omnihome-backup.json</strong>. Arquivos normais do Drive não serão acessados.</p></article>
+                <article class="card keep"><h3>Assinatura Google Play</h3><p>Permanece sob gestão do Google Play até que seja cancelada pelo usuário. A exclusão não cancela, reembolsa ou altera a assinatura.</p></article>
+                <article class="card keep"><h3>Registros de terceiros</h3><p>Dados que o Google precise manter por motivos legais, financeiros, antifraude ou operacionais seguem as políticas e os prazos do próprio Google.</p></article>
+            </div>
+        </section>
+
+        <section aria-labelledby="processo-title">
+            <h2 id="processo-title">Como a exclusão funciona</h2>
+            <ol class="steps">
+                <li>Entre com a mesma Conta Google usada no OmniHome.</li>
+                <li>O Firebase confirma sua identidade e verifica se a conta OmniHome existe.</li>
+                <li>Escolha se deseja excluir também o backup privado do OmniHome no Google Drive.</li>
+                <li>Leia as consequências, marque a confirmação e digite <strong>EXCLUIR</strong>.</li>
+                <li>Autentique-se novamente com Google. Se você escolheu excluir o backup, a mesma janela solicitará incrementalmente somente o acesso ao appDataFolder.</li>
+                <li>O backup escolhido é tratado primeiro; depois, a identidade Firebase é excluída e a sessão é encerrada.</li>
+            </ol>
+        </section>
+
+        <section class="panel" aria-labelledby="action-title">
+            <div class="panel-header">
+                <img class="app-icon" src="../../images/omnihome_icon.png" alt="Ícone do OmniHome">
+                <div><p class="eyebrow">Área segura</p><h2 id="action-title">Solicitar exclusão</h2></div>
+            </div>
+            <p>Nenhuma exclusão é feita apenas com um endereço de e-mail. Você precisa provar a propriedade da conta por meio do Google e confirmar novamente antes da exclusão.</p>
+
+            <p id="setup-notice" class="setup-notice" hidden>A autenticação web ainda não foi configurada. Nenhuma conta pode ser acessada ou excluída nesta versão local.</p>
+            <div id="status" class="status" role="status" aria-live="polite">Entre com Google para verificar sua conta OmniHome.</div>
+
+            <div id="signed-out-actions" class="actions">
+                <button id="google-sign-in" class="button button-primary" type="button">Entrar com Google</button>
+            </div>
+
+            <div id="signed-in-area" hidden>
+                <div class="auth-user"><strong>Conta autenticada</strong><span id="account-label"></span></div>
+                <label class="consent"><input id="delete-drive-backup" type="checkbox"><span><strong>Excluir também meu backup do OmniHome no Google Drive.</strong><br>Opcional e desmarcado por padrão. Se selecionado, somente o arquivo privado <em>omnihome-backup.json</em> no <em>appDataFolder</em> será procurado e removido. Arquivos normais do Drive não serão acessados.</span></label>
+                <label class="consent"><input id="understand-deletion" type="checkbox"><span>Entendi que esta ação exclui a identidade OmniHome, mas não apaga minha Conta Google, dados locais nem cancela assinatura Google Play. O backup Drive seguirá a escolha separada acima.</span></label>
+                <div class="actions">
+                    <button id="open-delete-confirmation" class="button button-danger" type="button" disabled>Continuar para exclusão</button>
+                    <button id="sign-out" class="button button-secondary" type="button">Sair sem excluir</button>
+                </div>
+            </div>
+
+            <p class="fine-print">Se não conseguir concluir o processo, entre em contato com <a href="mailto:evaupa.work@gmail.com">evaupa.work@gmail.com</a>. Por segurança, um pedido enviado apenas por e-mail não autoriza automaticamente a exclusão.</p>
+        </section>
+    </main>
+
+    <dialog id="delete-dialog" aria-labelledby="dialog-title">
+        <form method="dialog" class="dialog-body">
+            <h2 id="dialog-title">Confirmação final</h2>
+            <p>Esta ação exclui permanentemente a identidade Firebase do OmniHome. Ela não cancela sua assinatura nem apaga dados locais.</p>
+            <p id="drive-confirmation-summary"></p>
+            <label for="delete-phrase">Digite EXCLUIR para continuar</label>
+            <input id="delete-phrase" type="text" autocomplete="off" spellcheck="false">
+            <div class="dialog-actions">
+                <button id="cancel-delete" class="button button-secondary" value="cancel" type="submit">Voltar</button>
+                <button id="confirm-delete" class="button button-danger" value="confirm" type="button" disabled>Reautenticar e excluir</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="drive-failure-dialog" aria-labelledby="drive-failure-title">
+        <div class="dialog-body">
+            <h2 id="drive-failure-title">O backup não pôde ser excluído</h2>
+            <p id="drive-failure-message">A conta Firebase não foi excluída. Escolha como deseja continuar.</p>
+            <div class="dialog-actions">
+                <button id="cancel-drive-failure" class="button button-secondary" type="button">Cancelar a exclusão</button>
+                <button id="continue-preserving-drive" class="button button-secondary" type="button">Continuar preservando o backup</button>
+                <button id="retry-drive-delete" class="button button-danger" type="button">Tentar excluir o backup novamente</button>
+            </div>
+        </div>
+    </dialog>
+
+    <footer><div class="footer-inner"><span>© 2026 EVAUPA. Todos os direitos reservados.</span><a href="../../politica-de-privacidade-omnihome.html">Política de Privacidade do OmniHome</a></div></footer>
+
+    <script src="firebase-config.js"></script>
+    <script type="module" src="account-deletion.js"></script>
+</body>
+</html>
