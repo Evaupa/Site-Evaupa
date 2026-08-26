@@ -62,7 +62,8 @@
         .plan li::before { content: '✓'; color: var(--green); margin-right: 10px; font-weight: 800; }
         .privacy-callout { display: flex; justify-content: space-between; align-items: center; gap: 30px; }
         .privacy-callout p { color: var(--muted); max-width: 700px; }
-        .privacy-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+        .privacy-actions { width: 260px; flex: 0 0 260px; display: grid; grid-template-columns: 1fr; gap: 12px; }
+        .privacy-actions .btn { width: 100%; }
         footer { border-top: 1px solid var(--border); padding: 30px 20px; color: var(--muted); }
         .footer-inner { width: min(1180px, 100%); margin: 0 auto; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
         footer a { color: var(--muted); }
@@ -76,6 +77,7 @@
             .app-icon { width: 180px; }
             .feature-grid { grid-template-columns: 1fr 1fr; }
             .privacy-callout { align-items: flex-start; flex-direction: column; }
+            .privacy-actions { width: 100%; flex-basis: auto; }
         }
         @media (max-width: 560px) {
             .nav-links { gap: 12px; }
